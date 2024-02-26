@@ -9,7 +9,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.apirest.Model.Usuario;
 import com.example.apirest.Utils.Apis;
@@ -23,8 +25,19 @@ public class UsuarioActivity extends AppCompatActivity {
     UsuarioService service;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.persona_layout);
+
+        // Configura la barra de acción con el botón de retroceso y el logo
+        Toolbar toolbar = findViewById(R.id.toolbar); // Asegúrate de que el ID sea correcto
+        setSupportActionBar(toolbar); // Configura la barra de herramientas como la barra de acción
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setIcon(R.drawable.ic_launcher_logo); // Reemplaza ic_launcher_logo con el nombre correcto de tu recurso
+        }
 
         TextView idper=(TextView)findViewById(R.id.Id);
         EditText txtId=(EditText)findViewById(R.id.txtId);
@@ -32,10 +45,10 @@ public class UsuarioActivity extends AppCompatActivity {
         TextView nombres=(TextView)findViewById(R.id.nombres);
         final EditText txtNombres=(EditText)findViewById(R.id.txtNombres);
 
-        final EditText txtPass=(EditText)findViewById(R.id.txtPass);
+        /*final EditText txtPass=(EditText)findViewById(R.id.txtPass);
 
         TextView email=(TextView)findViewById(R.id.email);
-        final EditText txtEmail=(EditText)findViewById(R.id.txtEmail);
+        final EditText txtEmail=(EditText)findViewById(R.id.txtEmail);*/
 
         Button btnSave=(Button)findViewById(R.id.btnSave);
         Button btnVolver=(Button)findViewById(R.id.btnVolver);
@@ -45,13 +58,13 @@ public class UsuarioActivity extends AppCompatActivity {
         Bundle bundle=getIntent().getExtras();
         final String id = bundle.getString("ID");
         String nom=bundle.getString("NOMBRE");
-        String mail=bundle.getString("EMAIL");
-        String contra=bundle.getString("PASSWORD");
+        /*String mail=bundle.getString("EMAIL");
+        String contra=bundle.getString("PASSWORD");*/
 
         txtId.setText(id);
         txtNombres.setText(nom);
-        txtEmail.setText(mail);
-        txtPass.setText(contra);
+        /*txtEmail.setText(mail);
+        txtPass.setText(contra);*/
         if(id.trim().length()==0||id.equals("")){
             idper.setVisibility(View.INVISIBLE);
             txtId.setVisibility(View.INVISIBLE);
@@ -62,8 +75,8 @@ public class UsuarioActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Usuario p=new Usuario();
                 p.setName(txtNombres.getText().toString());
-                p.setEmail(txtEmail.getText().toString());
-                p.setPassword(txtPass.getText().toString());
+                /*p.setEmail(txtEmail.getText().toString());
+                p.setPassword(txtPass.getText().toString());*/
                 if(id.trim().length()==0||id.equals("")){
                     addPersona(p);
                     Intent intent =new Intent(UsuarioActivity.this,MainActivity.class);

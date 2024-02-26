@@ -18,10 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.AppConvert.backAppConvert.modelo.Usuario;
 import com.AppConvert.backAppConvert.service.UsuarioService;
 
-
-
-
-
 @RestController
 @RequestMapping(path ="/usuarios")
 public class UsuarioController {
@@ -43,7 +39,8 @@ public class UsuarioController {
 		}
 		return "Se registró con éxito!";
 	}
-    
+	
+   
 	
 	@PostMapping("/actualizar/{id}")
 	public String save(@RequestBody Usuario u,@PathVariable int id_usuario,Model model) {
@@ -54,6 +51,7 @@ public class UsuarioController {
 		}
 		return "Se actualizó con éxito!";
 	}
+	
 	@PostMapping("/eliminar/{id_usuario}")
 	public String delete(@PathVariable int id_usuario,Model model) {
 		int r=service.delete(id_usuario);

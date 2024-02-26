@@ -1,0 +1,74 @@
+package com.AppConvert.backAppConvert.controller;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.AppConvert.backAppConvert.modelo.Producto;
+import com.AppConvert.backAppConvert.service.ProductoService;
+
+@RestController
+@RequestMapping(path ="usuarios/productos")
+public class ProductoController {
+	
+	@Autowired
+	ProductoService productoService;
+	
+	@GetMapping("/listar")
+	public List<Map<String, Object>> listar() {
+		return productoService.listar();
+	}
+	
+		
+	@PostMapping("/agregarNuevo")
+	public String save(@RequestBody Producto p,Model model) {
+		int id_producto=productoService.add(p);
+		if(id_producto==0) {
+			return "No se pudo agregar el producto!";
+		}
+		return "Se registró con éxito!";
+	}
+	
+	   
+	
+	@PostMapping("/actualizar/{id_producto}")
+	public String save(@RequestBody Producto p,@PathVariable int id_producto,Model model) {
+		p.setId_producto(id_producto);
+		int r=productoService.edit(p);
+		if(r==0) {
+			return "No se pudo actualizar el id!";
+		}
+		return "Se actualizó con éxito!";
+	}
+	
+	
+    @PostMapping("/{id_producto}/sumar-cantidad")
+    public ResponseEntity<Producto> sumarCantidad(@PathVariable Long id_producto, @RequestParam int cantidad) {
+        Producto productoActualizado = productoService.sumarCantidadYActualizarTotal(id_producto, cantidad);
+        /*.orElseThrow(() -> new NoSuchElementException("Producto no encontrado"));*/
+
+        return ResponseEntity.ok(productoActualizado);
+    }
+    
+
+	
+	@PostMapping("/eliminar/{id_producto}")
+	public String delete(@PathVariable int id_producto,Model model) {
+		int r=productoService.delete(id_producto);
+		if(r==0) {
+			return "Registro No Eliminado!";
+		}
+		return "Registro Eliminado!";
+	}
+
+}

@@ -1,0 +1,65 @@
+package com.AppConvert.backAppConvert.modelo;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
+@Table(name = "Producto")
+@Entity
+public class Producto {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
+	private int id_producto;
+	@Column
+	private String nombre;
+	@Column
+	private String cantidad;
+	@Column
+	private String cantidadTotal;
+	
+	
+	public Producto() {
+		super();
+		
+	}
+	public Producto(int id_producto, String nombre, String cantidad, String cantidadTotal) {
+		super();
+		this.id_producto = id_producto;
+		this.nombre = nombre;
+		this.cantidad = cantidad;
+		this.cantidadTotal = cantidadTotal;
+	}
+	public int getId_producto() {
+		return id_producto;
+	}
+	public void setId_producto(long l) {
+		this.id_producto = (int) l;
+	}
+	public String getNombre() {
+		return nombre;
+	}
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	public String getCantidad() {
+		return cantidad;
+	}
+	public void setCantidad(String cantidad) {
+		this.cantidad = cantidad;
+	}
+	public String getCantidadTotal() {
+		return cantidadTotal;
+	}
+	public void setCantidadTotal(String cantidadTotal) {
+		this.cantidadTotal = cantidadTotal;
+	}
+	
+	
+
+}

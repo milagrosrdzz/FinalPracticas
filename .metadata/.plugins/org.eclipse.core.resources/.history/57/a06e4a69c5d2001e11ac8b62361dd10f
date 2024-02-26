@@ -1,0 +1,23 @@
+package com.AppConvert.backAppConvert.modeloDAO;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import com.AppConvert.backAppConvert.modelo.Producto;
+
+public class ProductoDAO {
+
+	@Autowired
+	JdbcTemplate template;
+	
+	public Object findById(Long id_producto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Producto save(Producto producto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

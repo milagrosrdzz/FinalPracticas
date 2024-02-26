@@ -11,7 +11,7 @@
     tools:showIn="@layout/activity_main">
 
     <TextView
-        android:id="@+id/IdPersona"
+        android:id="@+id/Id"
         android:layout_width="match_parent"
         android:layout_height="60dp" />
 
@@ -21,11 +21,11 @@
         android:layout_height="60dp" />
 
     <TextView
-        android:id="@+id/Email"
+        android:id="@+id/cantidadTotal"
         android:layout_width="match_parent"
         android:layout_height="60dp" />
 
-    </LinearLayout>
+</LinearLayout>
 
 
 

@@ -26,19 +26,20 @@ public class UsuarioAdapter extends ArrayAdapter<Usuario> {
         this.personas=objects;
     }
 
+
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater layoutInflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView=layoutInflater.inflate(R.layout.content_main,parent,false);
 
-        TextView txtidPersona=(TextView)rowView.findViewById(R.id.IdPersona);
+        TextView txtidPersona=(TextView)rowView.findViewById(R.id.Id);
         TextView txtNombre=(TextView)rowView.findViewById(R.id.Nombre);
-        TextView txtEmail=(TextView)rowView.findViewById(R.id.Email);
+        //TextView txtEmail=(TextView)rowView.findViewById(R.id.cantidadTotal);
 
 
         txtidPersona.setText(String.format("ID:%d",personas.get(position).getId_usuario()));
         txtNombre.setText(String.format("NOMBRE:%s", personas.get(position).getName()));
-        txtEmail.setText(String.format("EMAIL:%s",personas.get(position).getEmail()));
+        //txtEmail.setText(String.format("EMAIL:%s",personas.get(position).getEmail()));
 
 
         rowView.setOnClickListener(new View.OnClickListener() {

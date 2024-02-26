@@ -14,6 +14,14 @@ CREATE TABLE IF NOT EXISTS `appconvert_master`.`usuario` (
   PRIMARY KEY (`id_usuario`) 
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
+CREATE TABLE IF NOT EXISTS `appconvert_master`.`producto` (
+  `id_producto` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) DEFAULT NULL,
+  `cantidad` int(50) NOT NULL,
+  `cantidad_total` int(50) DEFAULT NULL,
+  PRIMARY KEY (`id_producto`) 
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
 DROP TABLE IF EXISTS `appconvert_master`.`role`;
 CREATE TABLE IF NOT EXISTS `role` (
   `role_id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -24,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `role` (
 
 
 insert into usuario (name,email,password) values ("Milagros", "milagros@gmail.com", 123);
-select * from usuario;
+
+insert into producto(nombre, cantidad,cantidadTotal) values ("Televisor samsung", 10,5);
 
 

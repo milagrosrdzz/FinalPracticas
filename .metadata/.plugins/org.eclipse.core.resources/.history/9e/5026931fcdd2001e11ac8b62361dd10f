@@ -1,0 +1,66 @@
+package com.AppConvert.backAppConvert.service;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.AppConvert.backAppConvert.interfaces.ProductoInterface;
+import com.AppConvert.backAppConvert.modelo.Producto;
+import com.AppConvert.backAppConvert.modeloDAO.ProductoDAO;
+
+@Service
+public class ProductoService implements ProductoInterface{
+	
+	 @Autowired
+	 private ProductoDAO productoDao;
+	    
+	    @Transactional
+	    public Producto sumarCantidadYActualizar(int id_producto, int cantidad) {
+	        Producto producto = (Producto) productoDao.findById(id_producto);
+	               /* .orElseThrow(RuntimeException::new);*/
+
+	        // Actualiza la cantidad y el total
+	        producto.setCantidad(producto.getCantidad() + cantidad);
+
+	        return productoDao.save(producto);
+	    }
+	
+	
+
+	public List<Map<String, Object>> listar() {
+		// TODO Auto-generated method stub
+		return productoDao.listar();
+	}
+
+	public int add(Producto p) {
+		return productoDao.add(p);
+	}
+
+	public int edit(Producto p) {
+		return productoDao.edit(p);
+	}
+
+	public int delete(int id_producto) {
+		return productoDao.delete(id_producto);
+	}
+
+	public Producto sumarCantidadYActualizarTotal(Long id_producto, int cantidad) {
+		return null;
+	}
+
+
+
+	@Override
+	public List<Map<String, Object>> listarId(int id_usuario) {
+		// TODO Auto-generated method stub
+		return productoDao.listarId(id_usuario);
+	}
+
+
+	
+
+}

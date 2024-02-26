@@ -1,0 +1,9 @@
+package com.AppConvert.backAppConvert.interfaces;
+
+import com.AppConvert.backAppConvert.modelo.Producto;
+
+public interface ProductoInterface {
+
+	int edit(Producto p);
+
+}

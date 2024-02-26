@@ -24,4 +24,7 @@ public interface UsuarioService {
     @POST("eliminar/{id}")
     Call<Usuario>deletePersona(@Path("id")int id);
 
+    @POST("login")
+    Call<Usuario>loginUser(@Body Usuario usuario);
+
 }

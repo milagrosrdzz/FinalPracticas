@@ -3,8 +3,10 @@ package com.example.apirest;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.apirest.Model.Producto;
 import com.example.apirest.Model.Usuario;
 import com.example.apirest.Utils.Apis;
+import com.example.apirest.Utils.ProductoService;
 import com.example.apirest.Utils.UsuarioService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -27,30 +29,37 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     UsuarioService usuarioService;
+    ProductoService productoService;
     List<Usuario> listUsuario =new ArrayList<>();
+    List<Producto> listProducto = new ArrayList<>();
     ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        listView=(ListView)findViewById(R.id.listView);
+        // Para mostrar el botón de retroceso
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        listPersons();
+        // Configura el logo en la barra de herramientas
+        getSupportActionBar().setIcon(R.drawable.ic_launcher_logo);
+
+        listView = findViewById(R.id.listView);
+        /*listPersons();*/
+        listProdu();
 
         FloatingActionButton fab = findViewById(R.id.fabe);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               Intent intent=new Intent(MainActivity.this, UsuarioActivity.class);
+               Intent intent=new Intent(MainActivity.this, AgregarProductoActivity.class);
                intent.putExtra("ID","");
                intent.putExtra("NOMBRE","");
-               intent.putExtra("EMAIL","");
-               intent.putExtra("PASSWORD","");
+               intent.putExtra("TOTAL","");
                startActivity(intent);
             }
         });
@@ -68,9 +77,27 @@ public class MainActivity extends AppCompatActivity {
                     listView.setAdapter(new UsuarioAdapter(MainActivity.this,R.layout.content_main, listUsuario));
                 }
             }
-
             @Override
             public void onFailure(Call<List<Usuario>> call, Throwable t) {
+                Log.e("Error:",t.getMessage());
+            }
+        });
+    }
+
+    public void listProdu(){
+        productoService = Apis.getProductoService();
+        Call<List<Producto>> call= productoService.getProductos();
+        call.enqueue(new Callback<List<Producto>>() {
+            @Override
+            public void onResponse(Call<List<Producto>> call, Response<List<Producto>> response) {
+                if(response.isSuccessful()) {
+                    listProducto = response.body();
+                    listView.setAdapter(new ProductoAdapter(MainActivity.this,R.layout.content_main, listProducto));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Producto>> call, Throwable t) {
                 Log.e("Error:",t.getMessage());
             }
         });

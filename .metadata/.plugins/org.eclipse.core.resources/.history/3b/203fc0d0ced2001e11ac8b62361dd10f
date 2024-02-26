@@ -1,0 +1,61 @@
+package com.AppConvert.backAppConvert.modeloDAO;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import com.AppConvert.backAppConvert.interfaces.ProductoInterface;
+import com.AppConvert.backAppConvert.modelo.Producto;
+
+@Repository
+@Transactional
+public class ProductoDAO implements ProductoInterface{
+
+	@Autowired
+	JdbcTemplate template;
+	
+	@Override
+	public List<Map<String, Object>> listar() {
+		List<Map<String, Object>> list = template.queryForList("select * from producto");
+		return list;
+	}
+
+	@Override
+	public int add(Producto p) {
+		String sql = "insert into producto(nombre,cantidad)values(?,?)";
+		return template.update(sql, p.getNombre(), p.getCantidad());
+	}
+
+	@Override
+	public int edit(Producto p) {
+		String sql="update producto set nombre=?, cantidad=? where id_producto?";		
+		return template.update(sql,p.getNombre(),p.getCantidad());
+	}
+
+	@Override
+	public int delete(int id_producto) {
+		String sql="delete from producto where id_producto=?";
+		return template.update(sql,id_producto);
+	}
+
+	@Override
+	public List<Map<String, Object>> listarId(int id_usuario) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Producto save(Producto producto) {
+		return null;
+	}
+
+	public Producto findById(Long id_producto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
