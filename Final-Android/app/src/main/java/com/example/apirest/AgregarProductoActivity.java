@@ -3,6 +3,8 @@ package com.example.apirest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,7 +56,6 @@ public class AgregarProductoActivity extends AppCompatActivity {
 
         Button btnSave = findViewById(R.id.btnSave);
         Button btnVolver = findViewById(R.id.btnVolver);
-        Button btnEliminar = findViewById(R.id.btnEliminar);
 
 
         Bundle bundle = getIntent().getExtras();
@@ -84,7 +85,7 @@ public class AgregarProductoActivity extends AppCompatActivity {
                     actualizar(Integer.valueOf(id_producto));
                 }
 
-                Intent intent = new Intent(AgregarProductoActivity.this, MainActivity.class);
+                Intent intent = new Intent(AgregarProductoActivity.this, ListaActivity.class);
                 startActivity(intent);
             }
         });
@@ -93,11 +94,13 @@ public class AgregarProductoActivity extends AppCompatActivity {
         btnVolver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AgregarProductoActivity.this, MainActivity.class);
+                Intent intent = new Intent(AgregarProductoActivity.this, ListaActivity.class);
                 startActivity(intent);
             }
 
         });
+
+
 
     }
     public void addProducto(Producto pr){
@@ -115,7 +118,7 @@ public class AgregarProductoActivity extends AppCompatActivity {
                 Log.e("Error:",t.getMessage());
             }
         });
-        Intent intent =new Intent(AgregarProductoActivity.this,MainActivity.class);
+        Intent intent =new Intent(AgregarProductoActivity.this,ListaActivity.class);
         startActivity(intent);
     }
 
@@ -136,8 +139,32 @@ public class AgregarProductoActivity extends AppCompatActivity {
                 Log.e("Error:",t.getMessage());
             }
         });
-        Intent intent =new Intent(AgregarProductoActivity.this,MainActivity.class);
+        Intent intent =new Intent(AgregarProductoActivity.this,ListaActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_all, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == android.R.id.home) {
+            // Handle the home button press
+            Intent intent = new Intent(AgregarProductoActivity.this, ListaActivity.class);
+            startActivity(intent);
+            finish();  // Opcional: cierra la actividad actual si no quieres volver a ella con el botón de retroceso
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

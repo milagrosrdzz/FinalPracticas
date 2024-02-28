@@ -3,125 +3,83 @@ package com.example.apirest;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.apirest.Model.Producto;
-import com.example.apirest.Model.Usuario;
-import com.example.apirest.Utils.Apis;
-import com.example.apirest.Utils.ProductoService;
-import com.example.apirest.Utils.UsuarioService;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.util.Log;
-import android.view.View;
+import android.net.Uri;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import android.view.View;
+import android.widget.Button;
+import android.widget.MediaController;
+import android.widget.VideoView;
 
 public class MainActivity extends AppCompatActivity {
-
-    UsuarioService usuarioService;
-    ProductoService productoService;
-    List<Usuario> listUsuario =new ArrayList<>();
-    List<Producto> listProducto = new ArrayList<>();
-    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.inicio_layout);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Para mostrar el botón de retroceso
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // Configura el logo en la barra de herramientas
-        getSupportActionBar().setIcon(R.drawable.ic_launcher_logo);
-
-        listView = findViewById(R.id.listView);
-        /*listPersons();*/
-        listProdu();
-
-        FloatingActionButton fab = findViewById(R.id.fabe);
-        fab.setOnClickListener(new View.OnClickListener() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setIcon(R.drawable.ic_launcher_logo);
+        }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-               Intent intent=new Intent(MainActivity.this, AgregarProductoActivity.class);
-               intent.putExtra("ID","");
-               intent.putExtra("NOMBRE","");
-               intent.putExtra("TOTAL","");
-               startActivity(intent);
+            public void onClick(View v) {
+                // Maneja la acción de tocar el logo aquí (por ejemplo, vuelve a MainActivity)
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
 
-    }
+        Button btnStart = findViewById(R.id.btnStart);
 
-    public void listPersons(){
-        usuarioService = Apis.getPersonaService();
-        Call<List<Usuario>>call= usuarioService.getPersonas();
-        call.enqueue(new Callback<List<Usuario>>() {
-            @Override
-            public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
-                if(response.isSuccessful()) {
-                    listUsuario = response.body();
-                    listView.setAdapter(new UsuarioAdapter(MainActivity.this,R.layout.content_main, listUsuario));
-                }
-            }
-            @Override
-            public void onFailure(Call<List<Usuario>> call, Throwable t) {
-                Log.e("Error:",t.getMessage());
-            }
-        });
-    }
+        VideoView videoView = findViewById(R.id.videoView);
+        String videoPath = "android.resource://" + getPackageName() + "/" + R.raw.video1343536529;
+        Uri uri = Uri.parse(videoPath);
+        videoView.setVideoURI(uri);
 
-    public void listProdu(){
-        productoService = Apis.getProductoService();
-        Call<List<Producto>> call= productoService.getProductos();
-        call.enqueue(new Callback<List<Producto>>() {
-            @Override
-            public void onResponse(Call<List<Producto>> call, Response<List<Producto>> response) {
-                if(response.isSuccessful()) {
-                    listProducto = response.body();
-                    listView.setAdapter(new ProductoAdapter(MainActivity.this,R.layout.content_main, listProducto));
-                }
-            }
+        MediaController mediaController = new MediaController(this);
+        videoView.setMediaController(mediaController);
+        mediaController.setAnchorView(videoView);
 
+        videoView.start();
+
+        //Boton empezar
+        btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFailure(Call<List<Producto>> call, Throwable t) {
-                Log.e("Error:",t.getMessage());
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AgregarProductoActivity.class);
+                intent.putExtra("ID","");
+                intent.putExtra("NOMBRE","");
+                intent.putExtra("TOTAL","");
+                startActivity(intent);
             }
         });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // Aquí puedes manejar la acción del menú
+                Intent intent = new Intent(this, ListaActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +23,7 @@ import com.example.apirest.Utils.Apis;
 import com.example.apirest.Utils.ProductoService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -61,7 +64,7 @@ public class ProductoActivity extends AppCompatActivity {
         TextView cantidadTotal = findViewById(R.id.cantidadTotal);
         txtCantidadTotal = findViewById(R.id.txtCantidadTotal);
 
-        Button btnSave = findViewById(R.id.btnSave);
+        //Button btnSave = findViewById(R.id.btnSave);
         Button btnVolver = findViewById(R.id.btnVolver);
         Button btnEliminar = findViewById(R.id.btnEliminar);
         Button btnMas = findViewById(R.id.btnMas);
@@ -84,7 +87,8 @@ public class ProductoActivity extends AppCompatActivity {
             txtId.setVisibility(View.INVISIBLE);
         }
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
+
+        /*btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Producto pr = new Producto();
@@ -97,10 +101,10 @@ public class ProductoActivity extends AppCompatActivity {
                     actualizar(Integer.valueOf(id_producto));
                 }
 
-                Intent intent = new Intent(ProductoActivity.this, MainActivity.class);
+                Intent intent = new Intent(ProductoActivity.this, ListaActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
         btnEliminar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +121,7 @@ public class ProductoActivity extends AppCompatActivity {
                         .setNegativeButton("No", null)
                         .show();
             }
-            });
+        });
 
 
 
@@ -125,7 +129,7 @@ public class ProductoActivity extends AppCompatActivity {
         btnVolver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProductoActivity.this, MainActivity.class);
+                Intent intent = new Intent(ProductoActivity.this, ListaActivity.class);
                 startActivity(intent);
             }
         });
@@ -188,7 +192,7 @@ public class ProductoActivity extends AppCompatActivity {
                 Log.e("Error:", t.getMessage());
             }
         });
-        Intent intent = new Intent(ProductoActivity.this, MainActivity.class);
+        Intent intent = new Intent(ProductoActivity.this, ListaActivity.class);
         startActivity(intent);
     }
 
@@ -208,7 +212,7 @@ public class ProductoActivity extends AppCompatActivity {
                 Log.e("Error:", t.getMessage());
             }
         });
-        Intent intent = new Intent(ProductoActivity.this, MainActivity.class);
+        Intent intent = new Intent(ProductoActivity.this, ListaActivity.class);
         startActivity(intent);
     }
 
@@ -222,7 +226,7 @@ public class ProductoActivity extends AppCompatActivity {
                     Toast.makeText(ProductoActivity.this, "Se Eliminó el registro", Toast.LENGTH_LONG).show();
 
                     // Mover la parte del Intent aquí, dentro del onResponse
-                    Intent intent = new Intent(ProductoActivity.this, MainActivity.class);
+                    Intent intent = new Intent(ProductoActivity.this, ListaActivity.class);
                     startActivity(intent);
                 }
             }
@@ -233,7 +237,6 @@ public class ProductoActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void sumarProducto(long id_producto, int cantidad) {
         Map<String, String> requestBody = new HashMap<>();
@@ -252,6 +255,8 @@ public class ProductoActivity extends AppCompatActivity {
 
                 if (response.isSuccessful()) {
                     Toast.makeText(ProductoActivity.this, "Cantidad agregada", Toast.LENGTH_LONG).show();
+
+                    cargarInformacionActualizada(id_producto);
                 } else {
                     Toast.makeText(ProductoActivity.this, "Error: " + response.message(), Toast.LENGTH_LONG).show();
                 }
@@ -264,15 +269,47 @@ public class ProductoActivity extends AppCompatActivity {
             }
         });
     }
+    // Agrega esta función en tu clase ProductoActivity
+    private void cargarInformacionActualizada(long id_producto) {
+        productoService = Apis.getProductoService();
+        Call<List<Producto>> call = productoService.getProductos();
+        call.enqueue(new Callback<List<Producto>>() {
+            @Override
+            public void onResponse(Call<List<Producto>> call, Response<List<Producto>> response) {
+                if (response.isSuccessful()) {
+                    // Buscar el producto específico por su ID en la respuesta
+                    Producto productoActualizado = buscarProductoPorId(response.body(), id_producto);
+
+                    if (productoActualizado != null) {
+                        // Actualizar la cantidad total en la interfaz de usuario
+                        txtCantidadTotal.setText(String.valueOf(productoActualizado.getCantidad_total()));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Producto>> call, Throwable t) {
+                Log.e("Error:", t.getMessage());
+            }
+        });
+    }
+    // Agrega esta función auxiliar
+    private Producto buscarProductoPorId(List<Producto> productos, long id_producto) {
+        for (Producto producto : productos) {
+            if (producto.getId_producto() == id_producto) {
+                return producto;
+            }
+        }
+        return null;
+    }
 
     private void restarProducto(long id_producto, int cantidad) {
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("cantidad", String.valueOf(cantidad));
 
         // Agregar logs para verificar la llamada
-        System.out.println("URL: " + productoService.sumarProducto(id_producto, requestBody).request().url());
+        System.out.println("URL: " + productoService.restarProducto(id_producto, requestBody).request().url());
         System.out.println("Datos: " + requestBody);
-
 
         Call<Producto> call = productoService.restarProducto(id_producto, requestBody);
         call.enqueue(new Callback<Producto>() {
@@ -282,6 +319,8 @@ public class ProductoActivity extends AppCompatActivity {
 
                 if (response.isSuccessful()) {
                     Toast.makeText(ProductoActivity.this, "Cantidad restada", Toast.LENGTH_LONG).show();
+
+                    cargarInformacionActualizada(id_producto);
                 } else {
                     Toast.makeText(ProductoActivity.this, "Error: " + response.message(), Toast.LENGTH_LONG).show();
                 }
@@ -294,4 +333,31 @@ public class ProductoActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_all, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            // Aquí puedes manejar la acción del menú
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == android.R.id.home) {
+            // Handle the home button press
+            Intent intent = new Intent(ProductoActivity.this, ListaActivity.class);
+            startActivity(intent);
+            finish();  // Opcional: cierra la actividad actual si no quieres volver a ella con el botón de retroceso
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+
+    }
+
+
 }

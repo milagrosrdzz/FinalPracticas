@@ -18,11 +18,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-
-
+            android:background="@color/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"/>
     </com.google.android.material.appbar.AppBarLayout>
 
 
@@ -31,8 +28,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_marginTop="?attr/actionBarSize"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:padding="150px">
+
 
         <TextView
             android:id="@+id/Id"
@@ -75,19 +72,15 @@
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button"
             android:text="GUARDAR" />
 
-
-        <Button
-            android:id="@+id/btnEliminar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Eliminar" />
 
         <Button
             android:id="@+id/btnVolver"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button"
             android:text="Volver" />
 
     </LinearLayout>

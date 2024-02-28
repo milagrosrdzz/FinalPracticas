@@ -1,12 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    compileSdkVersion 31
+    //compileSdkVersion 29
+    //buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "com.example.apirest"
+        applicationId "com.example.myapp"
         minSdkVersion 15
-        targetSdkVersion 29
+        targetSdkVersion 31
+        //applicationId "com.example.apirest"
+        //minSdkVersion 15
+        //targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -17,7 +21,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    repositories {
+        maven { url 'https://maven.google.com' } // Agrega el repositorio Maven de Google
+        google()
+    }
 }
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -29,4 +38,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+
 }
